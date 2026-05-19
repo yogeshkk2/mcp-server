@@ -14,7 +14,6 @@ help:
 	@echo "  just remove           Remove the container if it exists"
 	@echo "  just restart          Rebuild and restart the container"
 	@echo "  just logs             Tail logs from the running container"
-	@echo "  just test             Verify server health on http://localhost:$(PORT)/status"
 
 install:
 	#!/bin/bash
