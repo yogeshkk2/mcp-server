@@ -17,7 +17,7 @@ help:
 	@echo "  just test             Verify server health on http://localhost:$(PORT)/status"
 
 install:
-	python -m pip install -r requirements.txt
+	python3 -m pip install -r requirements.txt
 
 build:
 	docker build -t $(IMAGE) .
@@ -44,7 +44,7 @@ logs:
 	docker logs -f $(CONTAINER)
 
 test:
-	python - <<-'EOF'
+	python3 - <<-'EOF'
 	import os, sys
 	import urllib.request
 	url = f"http://localhost:{os.getenv('PORT', '8000')}/status"
@@ -58,6 +58,5 @@ test:
 	        sys.exit(1)
 	except Exception as e:
 	    print('FAIL:', e)
+	    sys.exit(1)
 	EOF
-    sys.exit(1)
-PY
