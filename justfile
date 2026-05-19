@@ -1,4 +1,4 @@
-set shell := ["bash", "-lc"]
+set shell := ["sh", "-c"]
 
 IMAGE := "mcp-server"
 CONTAINER := "mcp-server-container"
@@ -29,10 +29,10 @@ run-detached:
 	docker run -d --name $(CONTAINER) -p $(PORT):8000 -e MCP_HOST=0.0.0.0 -e MCP_PORT=8000 $(IMAGE)
 
 stop:
-	-docker stop $(CONTAINER)
+	docker stop $(CONTAINER) || true
 
 remove:
-	-docker rm -f $(CONTAINER)
+	docker rm -f $(CONTAINER) || true
 
 restart:
 	just stop
@@ -44,20 +44,4 @@ logs:
 	docker logs -f $(CONTAINER)
 
 test:
-	python3 - <<-'EOF'
-	import os, sys
-	import urllib.request
-	port = os.getenv('PORT', '8000')
-	url = "http://localhost:" + port + "/status"
-	try:
-	    with urllib.request.urlopen(url, timeout=5) as resp:
-	        body = resp.read().decode('utf-8')
-	        if resp.status == 200:
-	            print('OK:', body)
-	            sys.exit(0)
-	        print('FAIL: HTTP', resp.status)
-	        sys.exit(1)
-	except Exception as e:
-	    print('FAIL:', e)
-	    sys.exit(1)
-	EOF
+	curl -f http://localhost:$(PORT)/status || exit 1
