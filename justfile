@@ -44,19 +44,20 @@ logs:
 	docker logs -f $(CONTAINER)
 
 test:
-	python - <<'PY'
-import os, sys
-import urllib.request
-url = f"http://localhost:{os.getenv('PORT', '8000')}/status"
-try:
-    with urllib.request.urlopen(url, timeout=5) as resp:
-        body = resp.read().decode('utf-8')
-        if resp.status == 200:
-            print('OK:', body)
-            sys.exit(0)
-        print('FAIL: HTTP', resp.status)
-        sys.exit(1)
-except Exception as e:
-    print('FAIL:', e)
+	python - <<-'EOF'
+	import os, sys
+	import urllib.request
+	url = f"http://localhost:{os.getenv('PORT', '8000')}/status"
+	try:
+	    with urllib.request.urlopen(url, timeout=5) as resp:
+	        body = resp.read().decode('utf-8')
+	        if resp.status == 200:
+	            print('OK:', body)
+	            sys.exit(0)
+	        print('FAIL: HTTP', resp.status)
+	        sys.exit(1)
+	except Exception as e:
+	    print('FAIL:', e)
+	EOF
     sys.exit(1)
 PY
