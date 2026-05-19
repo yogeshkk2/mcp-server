@@ -47,7 +47,8 @@ test:
 	python3 - <<-'EOF'
 	import os, sys
 	import urllib.request
-	url = f"http://localhost:{os.getenv('PORT', '8000')}/status"
+	port = os.getenv('PORT', '8000')
+	url = "http://localhost:" + port + "/status"
 	try:
 	    with urllib.request.urlopen(url, timeout=5) as resp:
 	        body = resp.read().decode('utf-8')
