@@ -38,15 +38,13 @@ This MCP server exposes two primary tools designed for common calculations:
 ```
 mcp-server/
 ├── server.py                    # Main FastMCP server with tool definitions
-├── app/
+├── tools/
 │   ├── __init__.py
-│   ├── server.py                # Flask application with socket handling
-│   ├── config.py                # Configuration settings
-│   └── tools/
-│       ├── __init__.py
-│       └── inspector.py         # MCP Inspector utility class
+│   ├── calculator.py            # Calculator tool implementations
+│   └── server.py                # Flask application with socket handling
 ├── requirements.txt             # Python dependencies
 ├── Dockerfile                   # Container configuration
+├── justfile                     # Local task runner commands
 └── README.md                    # This file
 ```
 
@@ -57,6 +55,7 @@ mcp-server/
 - **Python 3.11:** Programming language and runtime
 - **Docker:** Containerization for deployment
 - **uvicorn:** ASGI server for HTTP transport
+- **Just:** Simple task runner for project commands
 
 ## Getting Started
 
@@ -148,14 +147,12 @@ Once the server is running, you can invoke the tools via MCP client:
 
 ## Configuration
 
-Configuration settings are defined in [app/config.py](app/config.py):
+Configuration settings are defined in [tools/server.py](tools/server.py):
 
 ```python
 HOST = '0.0.0.0'           # Server listening address
 PORT = 5000                # Flask server port
 DEBUG = True               # Debug mode
-CONNECTION_TIMEOUT = 30    # Connection timeout in seconds
-MAX_CONNECTIONS = 5        # Maximum concurrent connections
 ```
 
 ### Environment Variables
@@ -196,9 +193,8 @@ Both calculation tools include robust error handling:
 ### Project Layout
 
 - **Main Server:** [server.py](server.py) - FastMCP server initialization and tool definitions
-- **Flask App:** [app/server.py](app/server.py) - Secondary HTTP server with socket handling
-- **Inspector:** [app/tools/inspector.py](app/tools/inspector.py) - Utility for inspecting MCP server tools
-- **Configuration:** [app/config.py](app/config.py) - Server configuration constants
+- **Flask App:** [tools/server.py](tools/server.py) - Secondary HTTP server with socket handling
+- **Calculator Tools:** [tools/calculator.py](tools/calculator.py) - Calculator tool implementations
 
 ### Adding New Tools
 

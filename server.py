@@ -22,6 +22,7 @@ with streamable HTTP transport.
 
 import os
 from mcp.server.fastmcp import FastMCP
+from tools import calculator
 
 # Configuration from environment variables
 MCP_HOST = os.getenv("MCP_HOST", "0.0.0.0")
@@ -34,83 +35,14 @@ mcp = FastMCP("Calculator Server", json_response=True, host=MCP_HOST, port=MCP_P
 
 @mcp.tool()
 def convert_celsius_to_fahrenheit(celsius: float) -> str:
-    """
-    Converts a temperature value from Celsius to Fahrenheit scale.
-
-    This tool performs temperature conversion using the standard formula:
-    F = (C × 9/5) + 32
-
-    Args:
-        celsius (float): The temperature value in degrees Celsius to convert.
-
-    Returns:
-        str: A formatted string displaying both Celsius and Fahrenheit values
-             with 2 decimal precision, or an error message if conversion fails.
-
-    Examples:
-        >>> convert_celsius_to_fahrenheit(0)
-        '0°C is equal to 32.00°F'
-        
-        >>> convert_celsius_to_fahrenheit(100)
-        '100°C is equal to 212.00°F'
-        
-        >>> convert_celsius_to_fahrenheit(-40)
-        '-40°C is equal to -40.00°F'
-
-    Raises:
-        Catches all exceptions and returns an error message string.
-    """
-    try:
-        # Apply the Celsius to Fahrenheit conversion formula
-        fahrenheit = (celsius * 9/5) + 32
-
-        # Format result to 2 decimal places for readability
-        return f"{celsius}°C is equal to {fahrenheit:.2f}°F"
-    except Exception as e:
-        # Return error message if conversion fails
-        return f"Error during conversion: {str(e)}"
+    """Forward the Celsius-to-Fahrenheit conversion to the calculator module."""
+    return calculator.convert_celsius_to_fahrenheit(celsius)
 
 
 @mcp.tool()
 def calculate_percentage(part: float, total: float) -> str:
-    """
-    Calculates what percentage a given part represents of the total value.
-
-    This tool uses the standard percentage formula:
-    Percentage = (Part / Total) × 100
-
-    Args:
-        part (float): The portion or subset value to calculate percentage for.
-        total (float): The whole or 100% reference value. Cannot be zero.
-
-    Returns:
-        str: A formatted string showing the part, percentage, and total values
-             with 2 decimal precision, or an error message if calculation fails.
-
-    Examples:
-        >>> calculate_percentage(25, 100)
-        '25 is 25.00% of 100'
-        
-        >>> calculate_percentage(1, 2)
-        '1 is 50.00% of 2'
-        
-        >>> calculate_percentage(3, 4)
-        '3 is 75.00% of 4'
-
-    Raises:
-        Returns error message if total is zero (division by zero).
-        Catches all exceptions and returns an error message string.
-    """
-    # Check for division by zero
-    if total == 0:
-        return "Error: Division by zero. Total cannot be zero."
-
-    # Calculate percentage using the standard formula
-    # P = (part / total) * 100
-    percentage = (part / total) * 100
-
-    # Return formatted result with 2 decimal places
-    return f"{part} is {percentage:.2f}% of {total}"
+    """Forward percentage calculations to the calculator module."""
+    return calculator.calculate_percentage(part, total)
 
 
 # ============================================================================

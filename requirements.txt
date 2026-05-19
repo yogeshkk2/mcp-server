@@ -6,4 +6,3 @@ flask-socketio
 mcp==1.27.1
 uvicorn
 httpx
-mcp
