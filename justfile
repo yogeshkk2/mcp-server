@@ -64,19 +64,19 @@ install:
 	echo "To activate this environment in your current terminal, run: source $VENV_DIR/bin/activate"
 
 build:
-	docker build -t $(IMAGE) .
+	docker build -t {{ IMAGE }} .
 
 run:
-	docker run --rm --name $(CONTAINER) -p $(PORT):8000 -e MCP_HOST=0.0.0.0 -e MCP_PORT=8000 $(IMAGE)
+	docker run --rm --name {{ CONTAINER }} -p {{ PORT }}:8000 -e MCP_HOST=0.0.0.0 -e MCP_PORT=8000 {{ IMAGE }}
 
 run-detached:
-	docker run -d --name $(CONTAINER) -p $(PORT):8000 -e MCP_HOST=0.0.0.0 -e MCP_PORT=8000 $(IMAGE)
+	docker run -d --name {{ CONTAINER }} -p {{ PORT }}:8000 -e MCP_HOST=0.0.0.0 -e MCP_PORT=8000 {{ IMAGE }}
 
 stop:
-	docker stop $(CONTAINER) || true
+	docker stop {{ CONTAINER }} || true
 
 remove:
-	docker rm -f $(CONTAINER) || true
+	docker rm -f {{ CONTAINER }} || true
 
 restart:
 	just stop
@@ -85,7 +85,7 @@ restart:
 	just run-detached
 
 logs:
-	docker logs -f $(CONTAINER)
+	docker logs -f {{ CONTAINER }}
 
 test:
-	curl -f http://localhost:$(PORT)/status || exit 1
+	curl -f http://localhost:{{ PORT }}/status || exit 1
