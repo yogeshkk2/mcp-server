@@ -86,6 +86,3 @@ restart:
 
 logs:
 	docker logs -f {{ CONTAINER }}
-
-test:
-	curl -f http://localhost:{{ PORT }}/status || exit 1
