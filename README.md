@@ -6,7 +6,7 @@ A containerized **Model Context Protocol (MCP)** server built with Python and Fa
 
 ## Overview
 
-This MCP server exposes two primary tools designed for common calculations:
+This MCP server exposes multiple utility tools for common calculations and news fetching:
 
 ### Available Tools
 
@@ -28,10 +28,57 @@ This MCP server exposes two primary tools designed for common calculations:
    - **Example:** `25 is 50.00% of 50`
    - **Error Handling:** Prevents division by zero errors
 
+3. **Latest News Fetcher**
+   - **Function:** `get_latest_news(query: str = "technology", language: str = "en", max_results: int = 5) -> str`
+   - **Description:** Fetches the latest news articles based on a search query from NewsAPI
+   - **Inputs:**
+     - `query`: Search topic (e.g., "technology", "sports", "business", "python programming")
+     - `language`: ISO 639-1 language code (default: "en" for English)
+     - `max_results`: Maximum number of articles to return, 1-100 (default: 5)
+   - **Output:** Formatted string containing article titles, descriptions, sources, publication dates, and URLs
+   - **Example:** Returns top 5 articles about Python programming in English
+   - **Error Handling:** Handles network timeouts, connection errors, and API errors gracefully
+
+4. **Top Headlines Fetcher**
+   - **Function:** `get_top_headlines(country: str = "us", category: str = "general", max_results: int = 5) -> str`
+   - **Description:** Fetches top headlines for a specific country and category from NewsAPI
+   - **Inputs:**
+     - `country`: ISO 2-letter country code (e.g., "us", "uk", "in", "fr", "de", "ca")
+     - `category`: News category - business, entertainment, general, health, science, sports, technology
+     - `max_results`: Maximum number of articles to return, 1-100 (default: 5)
+   - **Output:** Formatted string containing headline articles with details
+   - **Example:** Returns top 5 technology headlines from the United States
+   - **Error Handling:** Validates inputs and handles API errors
+
 ### Additional Features
 
 - **Dynamic Greeting Resource:** `greeting://{name}` - Provides personalized greetings
 - **Prompt Generation:** Create greeting prompts in different styles (friendly, formal, casual)
+
+### News API Integration
+
+The news fetching tools use **NewsAPI.org** (free tier) to provide real-time news data:
+
+- **API Endpoint:** https://newsapi.org/v2/
+- **Free Tier:** 100 requests per day
+- **Setup:**
+  1. Sign up for a free account at https://newsapi.org/
+  2. Go to the **API Keys** section in your NewsAPI dashboard.
+  3. Create a new API key if you don't already have one, or generate a replacement key when required.
+  4. Set the environment variable for your runtime environment:
+     - macOS/Linux: `export NEWSAPI_KEY="your_api_key"`
+     - Windows PowerShell: `$env:NEWSAPI_KEY = "your_api_key"`
+     - Docker: use `-e NEWSAPI_KEY=your_api_key` when running the container
+  5. If no API key is set, the tools will use the default demo key with limited functionality.
+
+**Example Usage:**
+```python
+# Get latest technology news
+get_latest_news("artificial intelligence", language="en", max_results=10)
+
+# Get top headlines from the UK in sports category
+get_top_headlines(country="uk", category="sports", max_results=5)
+```
 
 ## Project Structure
 
