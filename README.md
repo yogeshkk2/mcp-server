@@ -69,7 +69,7 @@ mcp-server/
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/mcp-server.git
+   git clone https://github.com/yogeskk2/mcp-server.git
    cd mcp-server
    ```
 
