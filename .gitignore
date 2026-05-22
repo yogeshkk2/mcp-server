@@ -1,0 +1,15 @@
+# Ignore Neo4j database files and directories
+neo4j/
+
+# Python artifacts
+__pycache__/
+*.pyc
+
+# Virtualenv
+.venv/
+venv/
+env/
+
+# OS files
+.DS_Store
+Thumbs.db
