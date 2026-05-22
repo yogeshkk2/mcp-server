@@ -28,9 +28,11 @@ Environment Variables:
     NEWSAPI_KEY: Your NewsAPI.org API key (optional, default: demo key with limited requests)
 """
 
+import inspect
 import os
 from mcp.server.fastmcp import FastMCP
 from tools import calculator, news
+from tools.neo4j_client import init_driver, close_driver, store_article as neo_store_article, list_articles as neo_list_articles
 
 # Configuration from environment variables
 MCP_HOST = os.getenv("MCP_HOST", "0.0.0.0")
@@ -39,6 +41,8 @@ MCP_PORT = int(os.getenv("MCP_PORT", "8000"))
 # Create MCP server instance
 # json_response=True ensures responses are properly formatted as JSON
 mcp = FastMCP("Calculator Server", json_response=True, host=MCP_HOST, port=MCP_PORT)
+
+# Tools are registered directly with MCP; policy enforcement removed.
 
 
 @mcp.tool()
@@ -91,6 +95,28 @@ def get_top_headlines(
         Formatted string containing top headline articles with titles and descriptions.
     """
     return news.get_top_headlines(country, category=category if category != "general" else None, max_results=max_results)
+
+
+@mcp.tool()
+def store_news_article(title: str, url: str) -> str:
+    """Store a news article node in Neo4j."""
+    try:
+        neo_store_article(title, url)
+        return f"Stored article: {title}"
+    except Exception as exc:
+        return f"Failed to store article: {exc}"
+
+
+@mcp.tool()
+def list_stored_articles(limit: int = 10) -> str:
+    """List stored articles from Neo4j."""
+    try:
+        rows = neo_list_articles(limit)
+        if not rows:
+            return "No articles found."
+        return "\n".join([f"{r['title']} - {r['url']}" for r in rows])
+    except Exception as exc:
+        return f"Failed to list articles: {exc}"
 
 
 # ============================================================================
@@ -176,4 +202,17 @@ if __name__ == "__main__":
     print("\nAvailable prompts:")
     print("  - greet_user")
     print("\nServer running on streamable HTTP transport...")
-    mcp.run(transport="streamable-http")
+    # Initialize Neo4j driver (if configured) and run server
+    try:
+        init_driver()
+    except Exception as _:
+        # If Neo4j is not available, tools that use it will return errors at call time
+        pass
+
+    try:
+        mcp.run(transport="streamable-http")
+    finally:
+        try:
+            close_driver()
+        except Exception:
+            pass

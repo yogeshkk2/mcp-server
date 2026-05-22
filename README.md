@@ -155,7 +155,9 @@ The server will start on `http://localhost:8000` with streamable HTTP transport.
      mcp-server
    ```
 
-   The server will be accessible at `http://localhost:8000`
+  The server will be accessible at `http://localhost:8000`
+
+  Policy enforcement: None — OPA integration and policy rules have been removed from this repository.
 
 ## Usage
 
@@ -215,6 +217,8 @@ DEBUG = True               # Debug mode
 |------|-----------|---------|---------|
 | `convert_celsius_to_fahrenheit` | `celsius: float` | `str` | Convert Celsius to Fahrenheit |
 | `calculate_percentage` | `part: float, total: float` | `str` | Calculate percentage of part relative to total |
+| `store_news_article` | `title: str, url: str` | `str` | Store a news article node in Neo4j |
+| `list_stored_articles` | `limit: int` | `str` | List stored articles from Neo4j |
 
 ### Resources
 

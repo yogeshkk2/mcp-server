@@ -6,3 +6,4 @@ flask-socketio
 mcp==1.27.1
 uvicorn
 httpx
+neo4j>=5.10.0
